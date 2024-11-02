@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Quantum XO Simulator - A game of Tic Tac Toe with a quantum twist">
+    <title>Tic Tac Toe Simulator</title>
+    <script src="https://unpkg.com/react@17/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="min-h-screen flex items-center justify-center">
+    <div id="root"></div>
+    <script type="text/babel">
+        const { useState, useEffect, useRef } = React;
+
+        function QuantumParticles({ count = 20 }) {
+            return (
+                <>
+                    {[...Array(count)].map((_, index) => (
+                        <div 
+                            key={index} 
+                            className="quantum-particle" 
+                            style={{
+                                top: `${Math.random() * 100}%`,
+                                left: `${Math.random() * 100}%`,
+                                animationDelay: `${Math.random() * 3}s`
+                            }}
+                        />
+                    ))}
+                </>
+            );
+        }
+
+        function QuantumXOGame() {
+            const [board, setBoard] = useState(Array(9).fill(''));
+            const [isXNext, setIsXNext] = useState(true);
+            const [gameOver, setGameOver] = useState(false);
+            const [winner, setWinner] = useState('');
+            const [winningLine, setWinningLine] = useState([]);
+            const [isSinglePlayer, setIsSinglePlayer] = useState(null);
+            const [gameMode, setGameMode] = useState('start');
+            const [playerScores, setPlayerScores] = useState({ X: 0, O: 0 });
+            const [quantumEntanglement, setQuantumEntanglement] = useState(0);
+
+            useEffect(() => {
+                if (isSinglePlayer && !isXNext && !gameOver) {
+                    const timer = setTimeout(() => computerMove(), 500);
+                    return () => clearTimeout(timer);
+                }
+            }, [isXNext, isSinglePlayer, gameOver]);
+
+            const handleClick = (index) => {
+                if (board[index] || gameOver) return;
+
+                const newBoard = [...board];
+                newBoard[index] = isXNext ? 'X' : 'O';
+                setBoard(newBoard);
+                setIsXNext(!isXNext);
+                
+                // Quantum Entanglement Mechanic
+                if (Math.random() < 0.1) {
+                    setQuantumEntanglement(prev => prev + 1);
+                    const randomIndex = Math.floor(Math.random() * 9);
+                    if (!newBoard[randomIndex]) {
+                        newBoard[randomIndex] = Math.random() > 0.5 ? 'X' : 'O';
+                    }
+                }
+
+                const result = calculateWinner(newBoard);
+                if (result) {
+                    setGameOver(true);
+                    setWinner(result.winner);
+                    setWinningLine(result.line);
+                    setGameMode('end');
+                    updateScores(result.winner);
+                } else if (newBoard.every(cell => cell)) {
+                    setGameOver(true);
+                    setWinner('Quantum Entanglement');
+                    setGameMode('end');
+                }
+            };
+
+            const updateScores = (winner) => {
+                if (winner !== 'Quantum Entanglement') {
+                    setPlayerScores(prev => ({
+                        ...prev,
+                        [winner]: prev[winner] + 1
+                    }));
+                }
+            };
+
+            const computerMove = () => {
+                const emptyIndices = board.map((cell, index) => cell === '' ? index : null).filter(index => index !== null);
+                const randomIndex = emptyIndices[Math.floor(Math.random() * emptyIndices.length)];
+                handleClick(randomIndex);
+            };
+
+            const calculateWinner = (board) => {
+                const lines = [
+                    [0, 1, 2], [3, 4, 5], [6, 7, 8],  // Rows
+                    [0, 3, 6], [1, 4, 7], [2, 5, 8],  // Columns
+                    [0, 4, 8], [2, 4, 6]  // Diagonals
+                ];
+
+                for (let line of lines) {
+                    const [a, b, c] = line;
+                    if (board[a] && board[a] === board[b] && board[a] === board[c]) {
+                        return { winner: board[a], line };
+                    }
+                }
+                return null;
+            };
+
+            const resetGame = () => {
+                setBoard(Array(9).fill(''));
+                setIsXNext(true);
+                setGameOver(false);
+                setWinner('');
+                setWinningLine([]);
+                setGameMode('game');
+                setQuantumEntanglement(0);
+            };
+
+            const chooseMode = (mode) => {
+                setIsSinglePlayer(mode === 'single');
+                setGameMode('game');
+                resetGame();
+            };
+
+            const renderGameMode = () => {
+                switch (gameMode) {
+                    case 'start':
+                        return (
+                            <div className="text-center relative">
+                                <QuantumParticles count={50} />
+                                <h1 className="text-5xl font-bold mb-8 text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-600">
+                                    Start
+                                </h1>
+                                <div className="mb-4 space-x-4">
+                                    <button 
+                                        onClick={() => chooseMode('single')} 
+                                        className="multiverse-button text-white px-8 py-4 rounded-full transition-all hover:scale-105"
+                                    >
+                                        Solo Mode
+                                    </button>
+                                    <button 
+                                        onClick={() => chooseMode('multi')} 
+                                        className="multiverse-button text-white px-8 py-4 rounded-full transition-all hover:scale-105"
+                                    >
+                                        Multiplayer
+                                    </button>
+                                </div>
+                            </div>
+                        );
+                    case 'game':
+                        return (
+                            <div className="text-center relative">
+                                <QuantumParticles />
+                                <div className="flex justify-center mb-4 space-x-8">
+                                    <div className={`text-xl ${isXNext ? 'text-green-400' : 'text-opacity-50'}`}>
+                                        X Player: {playerScores.X}
+                                    </div>
+                                    <div className={`text-xl ${!isXNext ? 'text-blue-400' : 'text-opacity-50'}`}>
+                                        O Player: {playerScores.O}
+                                    </div>
+                                </div>
+                                <h2 className="text-2xl mb-4">
+                                    Level: {quantumEntanglement}
+                                </h2>
+                                <div className="quantum-grid grid grid-cols-3 gap-2 w-64 sm:w-80 mx-auto mb-4 p-2 rounded-xl">
+                                    {board.map((cell, index) => (
+                                        <div
+                                            key={index}
+                                            className={`quantum-cell relative w-16 sm:w-24 h-16 sm:h-24 flex items-center justify-center text-3xl sm:text-4xl font-bold cursor-pointer 
+                                                ${winningLine.includes(index) ? 'bg-blue-900 bg-opacity-50' : ''}
+                                                ${cell === 'X' ? 'text-green-400' : 'text-blue-400'}`}
+                                            onClick={() => handleClick(index)}
+                                        >
+                                            {cell}
+                                            <div className="quantum-effect"></div>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        );
+                    case 'end':
+                        return (
+                            <div className="text-center relative bg-black bg-opacity-50 p-8 rounded-xl">
+                                <QuantumParticles count={100} />
+                                <h2 className={`text-4xl font-bold mb-4 winner-quantum-pulse ${winner === 'X' ? 'text-green-400' : 'text-blue-400'}`}>
+                                    {winner === 'Quantum Entanglement' 
+                                        ? 'Quantum Multiverse Collapsed' 
+                                        : `Player ${winner} Conquers the Multiverse!`}
+                                </h2>
+                                <div className="flex justify-center space-x-4 mt-6">
+                                    <button 
+                                        onClick={resetGame} 
+                                        className="multiverse-button text-white px-6 py-3 rounded-full transition-all hover:scale-105"
+                                    >
+                                        Restart
+                                    </button>
+                                    <button 
+                                        onClick={() => setGameMode('start')} 
+                                        className="multiverse-button text-white px-6 py-3 rounded-full transition-all hover:scale-105"
+                                    >
+                                        Home
+                                    </button>
+                                </div>
+                            </div>
+                        );
+                    default:
+                        return null;
+                }
+            };
+
+            return (
+                <div className="container mx-auto px-4 py-8 relative">
+                    {renderGameMode()}
+                </div>
+            );
+        }
+
+        ReactDOM.render(<QuantumXOGame />, document.getElementById('root'));
+    </script>
+</body>
+</html>

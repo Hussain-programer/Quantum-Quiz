@@ -1,0 +1,318 @@
+body {
+    background: linear-gradient(135deg, #030614, #001f3f, #04081a);
+    font-family: 'Orbitron', 'Arial', sans-serif;
+    overflow-x: hidden;
+    color: #00ffff;
+}
+
+.quantum-grid {
+    perspective: 2000px;
+    transform-style: preserve-3d;
+    background: rgba(0, 30, 60, 0.5);
+    border: 2px solid rgba(0, 255, 255, 0.2);
+    box-shadow: 0 0 50px rgba(0, 255, 255, 0.1);
+}
+
+.quantum-cell {
+    transition: all 0.5s cubic-bezier(0.165, 0.84, 0.44, 1);
+    background: linear-gradient(145deg, rgba(0, 30, 60, 0.8), rgba(0, 15, 30, 0.6));
+    border: 2px solid rgba(0, 255, 255, 0.3);
+    transform-style: preserve-3d;
+    backface-visibility: hidden;
+    position: relative;
+    overflow: hidden;
+}
+
+.quantum-cell::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(
+        45deg, 
+        transparent, 
+        rgba(0, 255, 255, 0.1), 
+        rgba(0, 255, 255, 0.2), 
+        transparent
+    );
+    transform: rotate(-45deg);
+    opacity: 0;
+    transition: opacity 0.4s;
+}
+
+.quantum-cell:hover::before {
+    opacity: 1;
+}
+
+.quantum-cell:hover {
+    transform: scale(1.1) rotateX(15deg) rotateY(10deg) translateZ(50px);
+    border-color: rgba(0, 255, 255, 0.8);
+    box-shadow: 0 15px 30px rgba(0, 255, 255, 0.2);
+}
+
+.quantum-particle {
+    position: absolute;
+    width: 5px;
+    height: 5px;
+    background: rgba(0, 255, 255, 0.5);
+    border-radius: 50%;
+    animation: particle-flow 3s infinite alternate;
+}
+
+@keyframes particle-flow {
+    0% { 
+        transform: translateX(-100%) translateY(-100%) scale(0.5); 
+        opacity: 0;
+    }
+    100% { 
+        transform: translateX(100%) translateY(100%) scale(1.5); 
+        opacity: 1;
+    }
+}
+
+.quantum-effect {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle, rgba(0, 255, 255, 0.2), transparent 70%);
+    opacity: 0;
+    transition: opacity 0.3s;
+    pointer-events: none;
+}
+
+.quantum-cell:hover .quantum-effect {
+    opacity: 1;
+}
+
+.multiverse-button {
+    background: linear-gradient(135deg, #00ffff, #007fff);
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.multiverse-button::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(120deg, transparent, rgba(255,255,255,0.3), transparent);
+    transition: all 0.5s;
+}
+
+.multiverse-button:hover::after {
+    left: 100%;
+}
+
+.winner-quantum-pulse {
+    animation: quantum-pulse 2s infinite alternate;
+}
+
+@keyframes quantum-pulse {
+    0% { 
+        text-shadow: 0 0 10px rgba(0, 255, 255, 0.5), 0 0 20px rgba(0, 255, 255, 0.3);
+        transform: scale(1);
+    }
+    100% { 
+        text-shadow: 0 0 30px rgba(0, 255, 255, 1), 0 0 50px rgba(0, 255, 255, 0.7);
+        transform: scale(1.05);
+    }
+}
+@media only screen and (max-width: 768px) {
+.quantum-grid {
+width: 80%;
+}
+.quantum-cell {
+width: 100%;
+height: 100%;
+}
+}
+
+@media only screen and (max-width: 480px) {
+.quantum-grid {
+width: 90%;
+}
+.quantum-cell {
+width: 100%;
+height: 100%;
+}
+.multiverse-button {
+padding: 0.5rem 1rem;
+}
+}
+
+@media only screen and (max-width: 320px) {
+.quantum-grid {
+width: 95%;
+}
+.quantum-cell {
+width: 100%;
+height: 100%;
+}
+.multiverse-button {
+padding: 0.2rem 0.5rem;
+}
+}
+@media only screen and (max-width: 1024px) and (min-resolution: 192dpi) {
+.quantum-grid {
+width: 80%;
+}
+.quantum-cell {
+width: 100%;
+height: 100%;
+}
+}
+
+@media only screen and (max-width: 768px) and (min-resolution: 192dpi) {
+.quantum-grid {
+width: 90%;
+}
+.quantum-cell {
+width: 100%;
+height: 100%;
+}
+.multiverse-button {
+padding: 0.5rem 1rem;
+}
+}
+
+@media only screen and (max-width: 480px) and (min-resolution: 192dpi) {
+.quantum-grid {
+width: 95%;
+}
+.quantum-cell {
+width: 100%;
+height: 100%;
+}
+.multiverse-button {
+padding: 0.2rem 0.5rem;
+}
+}
+
+@media only screen and (max-width: 320px) and (min-resolution: 192dpi) {
+.quantum-grid {
+width: 98%;
+}
+.quantum-cell {
+width: 100%;
+height: 100%;
+}
+.multiverse-button {
+padding: 0.1rem 0.3rem;
+}
+}
+@media only screen and (max-width: 768px) {
+.quantum-grid {
+width: 80%;
+}
+.quantum-cell {
+width: 100%;
+height: 100%;
+}
+.multiverse-button {
+padding: 0.5rem 1rem;
+}
+}
+
+@media only screen and (max-width: 480px) {
+.quantum-grid {
+width: 90%;
+}
+.quantum-cell {
+width: 100%;
+height: 100%;
+}
+.multiverse-button {
+padding: 0.2rem 0.5rem;
+}
+}
+
+@media only screen and (max-width: 320px) {
+.quantum-grid {
+width: 95%;
+}
+.quantum-cell {
+width: 100%;
+height: 100%;
+}
+.multiverse-button {
+padding: 0.1rem 0.3rem;
+}
+}
+
+@media only screen and (max-width: 1024px) and (min-resolution: 192dpi) {
+.quantum-grid {
+width: 80%;
+}
+.quantum-cell {
+width: 100%;
+height: 100%;
+}
+.multiverse-button {
+padding: 0.5rem 1rem;
+}
+}
+
+@media only screen and (max-width: 768px) and (min-resolution: 192dpi) {
+.quantum-grid {
+width: 90%;
+}
+.quantum-cell {
+width: 100%;
+height: 100%;
+}
+.multiverse-button {
+padding: 0.2rem 0.5rem;
+}
+}
+
+@media only screen and (max-width: 480px) and (min-resolution: 192dpi) {
+.quantum-grid {
+width: 95%;
+}
+.quantum-cell {
+width: 100%;
+height: 100%;
+}
+.multiverse-button {
+padding: 0.1rem 0.3rem;
+}
+}
+
+@media only screen and (max-width: 320px) and (min-resolution: 192dpi) {
+.quantum-grid {
+width: 98%;
+}
+.quantum-cell {
+width: 100%;
+height: 100%;
+}
+.multiverse-button {
+padding: 0.1rem 0.3rem;
+}
+}
+
+/* New media query for mobile devices */
+@media only screen and (max-width: 768px) {
+.intro-game-mode {
+display: flex;
+flex-direction: column;
+align-items: center;
+justify-content: center;
+height: 100vh;
+}
+.intro-game-mode button {
+margin: 1rem;
+}
+}
+
+.intro-game-mode {
+display: none;
+}
+
